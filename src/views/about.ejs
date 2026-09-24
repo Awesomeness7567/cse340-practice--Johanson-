@@ -1,3 +1,8 @@
+<%- include('partials/header') %>
+
+<main>
+    <h1><%= title %></h1>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,22 +15,9 @@
 
 <body>
 
-    <header>
-        <h1>Ava's Cybersecurity Website</h1>
-
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/products">Products</a></li>
-            </ul>
-        </nav>
-    </header>
-
     <main>
         <section class="about-card">
 
-            <h2>About Me</h2>
 
             <img
                 class="profile-picture"
@@ -58,10 +50,9 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Ava's Website. All rights reserved.</p>
-    </footer>
-
 </body>
 
 </html>
+</main>
+
+<%- include('partials/footer') %>

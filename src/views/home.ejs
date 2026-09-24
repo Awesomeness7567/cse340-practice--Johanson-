@@ -1,3 +1,10 @@
+<%- include('partials/header') %>
+
+<main>
+    <h1><%= title %></h1>
+
+    <p>Welcome to my Express application!</p>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,18 +16,6 @@
 </head>
 
 <body>
-
-    <header>
-        <h1>Ava's Cybersecurity Website</h1>
-
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/products">Products</a></li>
-            </ul>
-        </nav>
-    </header>
 
     <main>
         <section class="hero">
@@ -41,10 +36,9 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Ava's Website. All rights reserved.</p>
-    </footer>
-
 </body>
 
 </html>
+</main>
+
+<%- include('partials/footer') %>
