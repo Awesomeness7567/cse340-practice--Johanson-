@@ -29,6 +29,14 @@
         </div>
     </div>
 
+    <p><strong>Query Parameters:</strong></p>
+
+        <ul>
+            <% Object.keys(queryParams).forEach(key => { %>
+                <li><%= key %>: <%= queryParams[key] %></li>
+            <% }); %>
+        </ul>
+
     <div class="navigation">
         <p><a href="/catalog">&larr; Back to Course Catalog</a></p>
     </div>
