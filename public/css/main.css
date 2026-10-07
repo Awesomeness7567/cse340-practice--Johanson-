@@ -141,29 +141,6 @@ main {
     }
 }
 
-/* Products */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.product-card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-    transition: transform 0.2s;
-
-    h3 {
-        margin-top: 0;
-    }
-
-    &:hover {
-        transform: translateY(-5px);
-    }
-}
-
 /* Footer */
 footer {
     background-color: #12343b;
