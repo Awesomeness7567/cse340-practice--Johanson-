@@ -44,27 +44,26 @@ app.use((err, req, res, next) => {
     }
 
     const status = err.status || 500;
-    const template = status === 404 ? '404' : '500';
+    const isProduction = NODE_ENV === "production";
+    const template = status === 404 ? "404" : "500";
 
     const context = {
-        title: status === 404 ? 'Page Not Found' : 'Server Error',
-        error: NODE_ENV === 'production'
-            ? 'An error occurred'
-            : err.message,
-        stack: NODE_ENV === 'production'
-            ? null
-            : err.stack,
+        title: status === 404 ? "Page Not Found" : "Server Error",
+        error: isProduction ? "An error occurred." : err.message,
+        stack: isProduction ? null : err.stack,
         NODE_ENV
     };
 
     try {
         res.status(status).render(`errors/${template}`, context);
     } catch (renderError) {
+        console.error(renderError);
+
         if (!res.headersSent) {
-            res.status(status).send(
-                `<h1>Error ${status}</h1>
-                 <p>An error occurred.</p>`
-            );
+            res.status(status).send(`
+                <h1>Error ${status}</h1>
+                <p>An error occurred.</p>
+            `);
         }
     }
 });
