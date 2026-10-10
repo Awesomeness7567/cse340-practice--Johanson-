@@ -14,6 +14,11 @@ import {
     testErrorPage
 } from './index.js';
 
+import {
+  facultyListPage,
+  facultyDetailPage,
+} from "./faculty/faculty.js";
+
 const router = Router();
 
 router.get('/', homePage);
@@ -21,6 +26,9 @@ router.get('/about', aboutPage);
 
 router.get('/catalog', catalogPage);
 router.get('/catalog/:courseId', courseDetailPage);
+
+router.get("/faculty", facultyListPage);
+router.get("/faculty/:facultyId", facultyDetailPage);
 
 router.get('/demo', addDemoHeaders, demoPage);
 

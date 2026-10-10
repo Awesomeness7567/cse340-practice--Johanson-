@@ -37,6 +37,8 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
+    console.error(err);
+
     if (res.headersSent || res.finished) {
         return next(err);
     }
