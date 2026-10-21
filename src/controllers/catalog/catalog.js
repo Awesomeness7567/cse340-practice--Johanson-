@@ -1,54 +1,44 @@
-import {
-  getAllCourses,
-  getCourseById,
-  getSortedSections,
-} from "../../models/catalog/catalog.js";
+// Update these imports:
+import { getAllCourses, getCourseBySlug } from '../../models/catalog/courses.js';
+import { getSectionsByCourseSlug } from '../../models/catalog/catalog.js';
 
-const catalogPage = (req, res, next) => {
-  try {
-    const coursesObject = getAllCourses();
-    const courses = Object.values(coursesObject);
-
-    res.render("catalog/catalog", {
-      title: "Course Catalog",
-      courses,
+// Route handler for the course catalog list page
+const catalogPage = async (req, res) => {
+    // Model functions are async, so we must await them
+    const courses = await getAllCourses();
+    
+    res.render('catalog/catalog', {
+        title: 'Course Catalog',
+        courses: courses
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
-const courseDetailPage = (req, res, next) => {
-  try {
-    const courseId = req.params.courseId;
-    const sortBy = req.query.sort || "time";
+// Route handler for individual course detail pages
+const courseDetailPage = async (req, res, next) => {
+    const courseSlug = req.params.slugId; 
 
-    const course = getCourseById(courseId);
+    // Model functions are async, so we must await them
+    const course = await getCourseBySlug(courseSlug);
 
-    if (!course) {
-      const error = new Error("Course not found");
-      error.status = 404;
-      return next(error);
+    // Our model returns empty object {} when not found, not null
+    // Check if the object is empty using Object.keys()
+    if (Object.keys(course).length === 0) {
+    const err = new Error(`Course ${courseSlug} not found`);
+    err.status = 404;
+    return next(err);
     }
-
-    const sortedSections = getSortedSections(course.sections, sortBy);
-
-    const sortedCourse = {
-      ...course,
-      sections: sortedSections,
-    };
-
-    res.render("catalog/course-detail", {
-        title: course.title,
-        course: sortedCourse,
-        currentSort: sortBy,
-});
-  } catch (error) {
-    next(error);
-  }
+    
+    // Get sections (course offerings) separately from the catalog
+    // Pass the sortBy parameter directly to the model - PostgreSQL handles the sorting
+    const sortBy = req.query.sort || 'time';
+    const sections = await getSectionsByCourseSlug(courseSlug, sortBy);
+    
+    res.render('catalog/course-detail', {
+        title: `${course.courseCode} - ${course.name}`,
+        course: course,
+        sections: sections,
+        sortBy: sortBy
+    });
 };
 
-export {
-  catalogPage,
-  courseDetailPage,
-};
+export { catalogPage, courseDetailPage };
