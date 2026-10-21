@@ -21,6 +21,16 @@ import {
 
 const router = Router();
 
+router.use('/catalog', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/catalog.css">');
+    next();
+});
+
+router.use('/faculty', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+    next();
+});
+
 router.get('/', homePage);
 router.get('/about', aboutPage);
 
