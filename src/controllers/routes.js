@@ -19,6 +19,8 @@ import {
   facultyDetailPage,
 } from "./faculty/faculty.js";
 
+import contactRoutes from './forms/contact.js';
+
 const router = Router();
 
 router.use('/catalog', (req, res, next) => {
@@ -28,6 +30,11 @@ router.use('/catalog', (req, res, next) => {
 
 router.use('/faculty', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+    next();
+});
+
+router.use('/contact', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/contact.css">');
     next();
 });
 
@@ -43,6 +50,8 @@ router.get('/faculty/:facultySlug', facultyDetailPage);
 router.get('/demo', addDemoHeaders, demoPage);
 
 router.get('/test-error', testErrorPage);
+
+router.use('/contact', contactRoutes);
 
 export default router;
 

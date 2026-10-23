@@ -7,6 +7,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
+ * Runs the SQL file used by practice assignments.
+ * CREATE TABLE IF NOT EXISTS makes this safe to run on every startup.
+ */
+const setupPracticeDatabase = async () => {
+    const practicePath = join(__dirname, 'sql', 'practice.sql');
+
+    if (!fs.existsSync(practicePath)) {
+        return false;
+    }
+
+    const practiceSQL = fs.readFileSync(practicePath, 'utf8');
+    await db.query(practiceSQL);
+    console.log('Practice database tables initialized');
+    return true;
+};
+
+/**
  * Sets up the database by running the seed.sql file if needed.
  * Checks if faculty table has data - if not, runs a full re-seed.
  */
@@ -31,6 +48,8 @@ const setupDatabase = async () => {
     
     if (hasData) {
         console.log('Database already seeded');
+        // The main seed may already exist while practice tables are missing.
+        await setupPracticeDatabase();
         return true;
     }
     
@@ -39,6 +58,9 @@ const setupDatabase = async () => {
     const seedPath = join(__dirname, 'sql', 'seed.sql');
     const seedSQL = fs.readFileSync(seedPath, 'utf8');
     await db.query(seedSQL);
+
+    await setupPracticeDatabase();
+
     console.log('Database seeded successfully');
     
     return true;
