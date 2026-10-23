@@ -20,6 +20,7 @@ import {
 } from "./faculty/faculty.js";
 
 import contactRoutes from './forms/contact.js';
+import registrationRoutes from './forms/registration.js';
 
 const router = Router();
 
@@ -38,6 +39,12 @@ router.use('/contact', (req, res, next) => {
     next();
 });
 
+// Add registration-specific styles to all registration routes
+router.use('/register', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
+    next();
+});
+
 router.get('/', homePage);
 router.get('/about', aboutPage);
 
@@ -53,5 +60,7 @@ router.get('/test-error', testErrorPage);
 
 router.use('/contact', contactRoutes);
 
-export default router;
+// Registration routes
+router.use('/register', registrationRoutes);
 
+export default router;
