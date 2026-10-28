@@ -10,8 +10,9 @@ const requireLogin = (req, res, next) => {
         res.locals.isLoggedIn = true;
         next();
     } else {
-        // User is not authenticated - redirect to login
-        res.redirect('/login');
+        // User is not authenticated - explain why they were redirected
+        req.flash('warning', 'Please log in to access that page.');
+        return res.redirect('/login');
     }
 };
 

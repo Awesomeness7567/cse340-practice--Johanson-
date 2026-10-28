@@ -52,7 +52,7 @@ const processRegistration = async (req, res) => {
 
     if (!errors.isEmpty()) {
         // TODO: Log validation errors to console for debugging
-        console.error('Validation errors:', errors.array());
+        errors.array().forEach(error => req.flash('error', error.msg));
         // TODO: Redirect back to /register
         return res.redirect('/register');
     }
@@ -68,7 +68,7 @@ const { name, email, password } = req.body;
 
         if (emailAlreadyExists) {
             // TODO: Log message: 'Email already registered'
-            console.error('Email already registered');
+            req.flash('warning', 'Email already registered');
             // TODO: Redirect back to /register
             return res.redirect('/register');
         }
@@ -83,14 +83,15 @@ const { name, email, password } = req.body;
         await saveUser(name, email, hashedPassword);
 
         // TODO: Log success message to console
-        console.log('User registered successfully');
-        return res.redirect('/register/list');
+        req.flash('success', 'Registration successful! You can now log in.');
+        return res.redirect('/login');
         // TODO: Redirect to /register/list to show successful registration
         // NOTE: Later when we add authentication, we'll change this to require login first
     } catch (error) {
         // TODO: Log the error to console
         console.error('Error registering user:', error);
         // TODO: Redirect back to /register
+        req.flash('error', 'An error occurred during registration. Please try again.');
         return res.redirect('/register');
     }
 };

@@ -37,7 +37,7 @@ const processLogin = async (req, res) => {
 
     if (!errors.isEmpty()) {
         // TODO: Log validation errors to console
-        console.error('Validation errors:', errors.array());
+        req.flash('error', 'Invalid email or password. Please try again.');
         // TODO: Redirect back to /login
         return res.redirect('/login');
     }
@@ -50,7 +50,7 @@ const processLogin = async (req, res) => {
         // TODO: If not found, log "User not found" and redirect to /login
         const user = await findUserByEmail(email);
         if (!user) {
-            console.error('User not found');
+            req.flash('error', 'User not found. Please check your email and try again.');
             return res.redirect('/login');
         }
 
@@ -58,7 +58,7 @@ const processLogin = async (req, res) => {
         // TODO: If password incorrect, log "Invalid password" and redirect to /login
         const isMatch = await verifyPassword(password, user.password);
         if (!isMatch) {
-            console.error('Invalid password');
+            req.flash('error', 'Invalid password. Please try again.');
             return res.redirect('/login');
         }
 
@@ -68,11 +68,14 @@ const processLogin = async (req, res) => {
         // TODO: Store user in session: req.session.user = user
         // TODO: Redirect to /dashboard
         req.session.user = user;
+
+        req.flash('success', `Welcome, ${user.name}!`);
         res.redirect('/dashboard');
     } catch (error) {
         // Model functions do not catch errors, so handle them here
         // TODO: Log error to console
         console.error('Error processing login:', error);
+        req.flash('error', 'An error occurred while processing your login. Please try again.');
         // TODO: Redirect to /login
         res.redirect('/login');
     }
@@ -85,40 +88,14 @@ const processLogin = async (req, res) => {
  * specify a custom name when creating the session in server.js.
  */
 const processLogout = (req, res) => {
-    // First, check if there is a session object on the request
     if (!req.session) {
-        // If no session exists, there's nothing to destroy,
-        // so we just redirect the user back to the home page
         return res.redirect('/');
     }
 
-    // Call destroy() to remove this session from the store (PostgreSQL in our case)
-    req.session.destroy((err) => {
-        if (err) {
-            // If something goes wrong while removing the session from the database:
-            console.error('Error destroying session:', err);
+    delete req.session.user;
+    req.flash('success', 'You have been logged out successfully.');
+    return res.redirect('/');
 
-            /**
-             * Clear the session cookie from the browser anyway, so the client
-             * does not keep sending an invalid session ID.
-             */
-            res.clearCookie('connect.sid');
-
-            /** 
-             * Normally we would respond with a 500 error since logout did not fully succeed.
-             * Example: return res.status(500).send('Error logging out');
-             * 
-             * Since this is a practice site, we will redirect to the home page anyway.
-             */
-            return res.redirect('/');
-        }
-
-        // If session destruction succeeded, clear the session cookie from the browser
-        res.clearCookie('connect.sid');
-
-        // Redirect the user to the home page
-        res.redirect('/');
-    });
 };
 
 /**

@@ -6,6 +6,7 @@ import { setupDatabase, testConnection } from './src/models/setup.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
+import flash from './src/middleware/flash.js';
 
 import routes from './src/controllers/routes.js';
 import { addLocalVariables } from './src/middleware/global.js';
@@ -41,6 +42,12 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
+
+// Global middleware (sets res.locals variables)
+app.use(addLocalVariables);
+
+// Flash message middleware (must come after session and global middleware)
+app.use(flash);
 
 // Start automatic session cleanup
 startSessionCleanup();
