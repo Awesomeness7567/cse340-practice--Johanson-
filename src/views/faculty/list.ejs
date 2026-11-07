@@ -14,6 +14,7 @@
   <section class="faculty-grid">
     <% faculty.forEach((member) => { %>
       <article class="faculty-card">
+        <img class="faculty-image" src="/images/faculty/<%= member.slug %>.jpg" alt="Portrait of <%= member.name %>" onerror="this.classList.add('image-missing')">
         <h2>
           <a href="/faculty/<%= member.slug %>">
             <%= member.name %>

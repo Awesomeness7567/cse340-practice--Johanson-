@@ -14,10 +14,10 @@ import {
   facultyListPage,
   facultyDetailPage,
 } from "./faculty/faculty.js";
-import contactRoutes from './forms/contact.js';
-import registrationRoutes from './forms/registration.js';
-import loginRoutes from './forms/login.js';
-import { processLogout, showDashboard } from './forms/login.js';
+import { showContactForm, processContactForm, showContactResponses } from './forms/contact.js';
+import { showRegistrationForm, processRegistration, processDeleteAccount, showAllUsers, showEditAccountForm, processEditAccount } from './forms/registration.js';
+import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
+import { contactValidation, registrationValidation, editValidation, loginValidation } from '../middleware/validation/forms.js';
 import { requireLogin } from '../middleware/auth.js';
 
 const router = Router();
@@ -50,7 +50,8 @@ router.use('/login', (req, res, next) => {
 });
 
 // Login routes (form and submission)
-router.use('/login', loginRoutes);
+router.get('/login', showLoginForm);
+router.post('/login', loginValidation, processLogin);
 
 // Authentication-related routes at root level
 router.get('/logout', processLogout);
@@ -69,9 +70,16 @@ router.get('/demo', addDemoHeaders, demoPage);
 
 router.get('/test-error', testErrorPage);
 
-router.use('/contact', contactRoutes);
+router.get('/contact', showContactForm);
+router.post('/contact', contactValidation, processContactForm);
+router.get('/contact/responses', showContactResponses);
 
 // Registration routes
-router.use('/register', registrationRoutes);
+router.get('/register', showRegistrationForm);
+router.post('/register', registrationValidation, processRegistration);
+router.get('/register/list', showAllUsers);
+router.get('/register/:id/edit', requireLogin, showEditAccountForm);
+router.post('/register/:id/edit', requireLogin, editValidation, processEditAccount);
+router.post('/register/:id/delete', requireLogin, processDeleteAccount);
 
 export default router;

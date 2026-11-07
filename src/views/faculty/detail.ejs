@@ -2,6 +2,7 @@
 
 <main>
   <h1><%= faculty.name %></h1>
+  <img class="faculty-image faculty-profile-image" src="/images/faculty/<%= faculty.slug %>.jpg" alt="Portrait of <%= faculty.name %>" onerror="this.classList.add('image-missing')">
 
   <section class="faculty-details">
     <p><strong>Title:</strong> <%= faculty.title %></p>

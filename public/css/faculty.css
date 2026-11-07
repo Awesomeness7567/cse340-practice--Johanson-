@@ -1,0 +1,6 @@
+.faculty-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+.faculty-card { padding: 1rem; border: 1px solid #d8dee9; border-radius: 0.5rem; background: #fff; }
+.faculty-image { display: block; width: 160px; height: 160px; object-fit: cover; margin: 0 auto 1rem; border-radius: 50%; border: 3px solid #d8dee9; background: #eef1f5; }
+.faculty-image.image-missing { visibility: visible; }
+.faculty-image.image-missing::after { content: 'Image unavailable'; display: grid; place-items: center; width: 100%; height: 100%; color: #53606e; font-size: 0.8rem; text-align: center; }
+.faculty-profile-image { width: 220px; height: 220px; margin: 0 0 1.5rem; }
